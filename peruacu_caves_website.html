@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peruaçu Caves National Park | Brazil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans:wght@300;400;500;700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --earth-dark: #1a1209;
+            --earth-brown: #3d2b1f;
+            --earth-gold: #c9a84c;
+            --earth-cream: #f5f0e6;
+            --earth-green: #4a5d3f;
+            --earth-amber: #d4a017;
+            --cave-shadow: rgba(26, 18, 9, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background: var(--earth-dark);
+            color: var(--earth-cream);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://kimi-web-img.moonshot.cn/img/whc.unesco.org/ecf2d0ae7ca4542f7744fc61864b8e69fe6142ed.jpg') center/cover no-repeat;
+            filter: brightness(0.4) saturate(1.2);
+            transform: scale(1.1);
+            transition: transform 8s ease;
+        }
+
+        .hero.loaded .hero-bg {
+            transform: scale(1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(26, 18, 9, 0.3) 0%,
+                rgba(26, 18, 9, 0.6) 50%,
+                rgba(26, 18, 9, 0.95) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 2rem;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--earth-gold);
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero-title .highlight {
+            color: var(--earth-gold);
+            display: block;
+        }
+
+        .hero-divider {
+            width: 80px;
+            height: 2px;
+            background: var(--earth-gold);
+            margin: 0 auto 2rem;
+        }
+
+        .student-info {
+            background: rgba(201, 168, 76, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .student-info p {
+            font-size: 0.9rem;
+            color: var(--earth-cream);
+            margin: 0.3rem 0;
+            letter-spacing: 1px;
+        }
+
+        .student-info .label {
+            color: var(--earth-gold);
+            font-weight: 500;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-15px); }
+            60% { transform: translateX(-50%) translateY(-7px); }
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--earth-gold);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-indicator span::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--earth-gold);
+            border-radius: 2px;
+            animation: scrollDot 2s infinite;
+        }
+
+        @keyframes scrollDot {
+            0% { opacity: 1; top: 8px; }
+            100% { opacity: 0; top: 24px; }
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        .nav.scrolled {
+            background: rgba(26, 18, 9, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--earth-gold);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--earth-cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--earth-gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--earth-gold);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ===== SECTION COMMON ===== */
+        section {
+            position: relative;
+            padding: 6rem 2rem;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--earth-gold);
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            color: var(--earth-cream);
+            margin-bottom: 1rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--earth-gold);
+            margin: 0 auto;
+        }
+
+        /* ===== WONDERS SECTION - CARD STACK ===== */
+        .wonders {
+            background: linear-gradient(180deg, var(--earth-dark) 0%, var(--earth-brown) 100%);
+        }
+
+        .card-stack-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            height: 600px;
+            perspective: 1000px;
+        }
+
+        .card-stack {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .stack-card {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            background: var(--earth-brown);
+        }
+
+        .stack-card:nth-child(1) { z-index: 3; }
+        .stack-card:nth-child(2) { 
+            z-index: 2; 
+            transform: translateX(-50%) translateY(20px) scale(0.95);
+            opacity: 0.7;
+        }
+        .stack-card:nth-child(3) { 
+            z-index: 1; 
+            transform: translateX(-50%) translateY(40px) scale(0.9);
+            opacity: 0.5;
+        }
+
+        .stack-card.active {
+            transform: translateX(-50%) translateY(0) scale(1) !important;
+            opacity: 1 !important;
+            z-index: 10 !important;
+        }
+
+        .stack-card.moved {
+            transform: translateX(-50%) translateY(-500px) rotate(-5deg) !important;
+            opacity: 0 !important;
+        }
+
+        .stack-card img {
+            width: 100%;
+            height: 65%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .stack-card-content {
+            padding: 1.5rem 2rem;
+            background: var(--earth-brown);
+        }
+
+        .stack-card-content h3 {
+            font-family: 'Noto Serif', serif;
+            font-size: 1.3rem;
+            color: var(--earth-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stack-card-content p {
+            font-size: 0.95rem;
+            color: var(--earth-cream);
+            opacity: 0.9;
+        }
+
+        .card-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .card-nav-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--earth-gold);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .card-nav-btn.active {
+            background: var(--earth-gold);
+            transform: scale(1.2);
+        }
+
+        .card-hint {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--earth-gold);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .wonders-text {
+            max-width: 800px;
+            margin: 3rem auto 0;
+            text-align: center;
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--earth-cream);
+            opacity: 0.9;
+            padding: 2rem;
+            background: rgba(201, 168, 76, 0.05);
+            border-radius: 16px;
+            border-left: 3px solid var(--earth-gold);
+        }
+
+        /* ===== ROUTE SECTION ===== */
+        .route {
+            background: var(--earth-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .route::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://kimi-web-img.moonshot.cn/img/dynamic-media-cdn.tripadvisor.com/3c7f979158a1fd514044661e36db19bcb9147836.jpg') center/cover no-repeat;
+            opacity: 0.08;
+            filter: grayscale(0.5);
+        }
+
+        .route-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .route-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .route-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s;
+        }
+
+        .route-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .route-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(to top, rgba(26, 18, 9, 0.8), transparent);
+        }
+
+        .route-text h3 {
+            font-family: 'Noto Serif', serif;
+            font-size: 1.8rem;
+            color: var(--earth-gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .route-text p {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--earth-cream);
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .route-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .route-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: rgba(201, 168, 76, 0.1);
+            border-radius: 12px;
+            border-left: 3px solid var(--earth-gold);
+            transition: all 0.3s;
+        }
+
+        .route-step:hover {
+            background: rgba(201, 168, 76, 0.2);
+            transform: translateX(5px);
+        }
+
+        .step-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--earth-gold);
+            min-width: 40px;
+        }
+
+        .step-text {
+            font-size: 0.95rem;
+            color: var(--earth-cream);
+        }
+
+        .step-text strong {
+            color: var(--earth-gold);
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* ===== LODGING SECTION ===== */
+        .lodging {
+            background: linear-gradient(180deg, var(--earth-brown) 0%, var(--earth-dark) 100%);
+        }
+
+        .lodging-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .lodging-card {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(61, 43, 31, 0.6);
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .lodging-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            border-color: rgba(201, 168, 76, 0.5);
+        }
+
+        .lodging-card-img {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .lodging-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s;
+        }
+
+        .lodging-card:hover .lodging-card-img img {
+            transform: scale(1.1);
+        }
+
+        .lodging-card-body {
+            padding: 2rem;
+        }
+
+        .lodging-card-body h3 {
+            font-family: 'Noto Serif', serif;
+            font-size: 1.4rem;
+            color: var(--earth-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .lodging-card-body .location {
+            font-size: 0.9rem;
+            color: var(--earth-gold);
+            opacity: 0.7;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lodging-card-body p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--earth-cream);
+            opacity: 0.85;
+        }
+
+        .lodging-intro {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--earth-cream);
+            opacity: 0.9;
+        }
+
+        /* ===== SUSTAINABILITY SECTION ===== */
+        .sustainability {
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .sustainability-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://kimi-web-img.moonshot.cn/img/en.people.cn/754a7e1894c8cc845761de999f04decaa8361f9e.jpg') center/cover no-repeat;
+            filter: brightness(0.3) saturate(1.3);
+        }
+
+        .sustainability-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(26, 18, 9, 0.7) 0%,
+                rgba(61, 43, 31, 0.8) 100%
+            );
+        }
+
+        .sustainability-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .sustainability-content h2 {
+            font-family: 'Noto Serif', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            color: var(--earth-gold);
+            margin-bottom: 2rem;
+        }
+
+        .sustainability-content p {
+            font-size: 1.1rem;
+            line-height: 2.2;
+            color: var(--earth-cream);
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .sustainability-icons {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .sus-icon {
+            text-align: center;
+        }
+
+        .sus-icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--earth-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: var(--earth-gold);
+            transition: all 0.3s;
+        }
+
+        .sus-icon:hover .sus-icon-circle {
+            background: var(--earth-gold);
+            color: var(--earth-dark);
+            transform: scale(1.1);
+        }
+
+        .sus-icon span {
+            font-size: 0.9rem;
+            color: var(--earth-cream);
+            opacity: 0.8;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--earth-dark);
+            border-top: 1px solid rgba(201, 168, 76, 0.2);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Noto Serif', serif;
+            font-size: 1.5rem;
+            color: var(--earth-gold);
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--earth-cream);
+            opacity: 0.6;
+            margin-bottom: 1rem;
+        }
+
+        .footer-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--earth-gold);
+            margin: 1.5rem auto;
+            opacity: 0.5;
+        }
+
+        /* ===== ANIMATIONS ON SCROLL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .route-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .lodging-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .card-stack-container {
+                height: 500px;
+            }
+
+            .stack-card {
+                height: 420px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .sustainability-icons {
+                gap: 2rem;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .student-info {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--earth-dark);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s, visibility 0.8s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-ring {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(201, 168, 76, 0.2);
+            border-top-color: var(--earth-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--earth-gold);
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-ring"></div>
+            <div class="loader-text">Entering the Underground Realm...</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">Peruaçu</a>
+            <ul class="nav-links">
+                <li><a href="#wonders">Wonders</a></li>
+                <li><a href="#route">Route</a></li>
+                <li><a href="#lodging">Lodging</a></li>
+                <li><a href="#sustainability">Sustainability</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <p class="hero-subtitle">A Journey Through Time & Stone</p>
+            <h1 class="hero-title">
+                Peruaçu Caves<br>
+                <span class="highlight">National Park</span>
+            </h1>
+            <div class="hero-divider"></div>
+            <div class="student-info">
+                <p><span class="label">Student Name:</span> Yuze Zhang</p>
+                <p><span class="label">Student ID:</span> 2300880064</p>
+                <p><span class="label">Class & Group:</span> Group A Team 8</p>
+                <p><span class="label">Destination:</span> Peruaçu Caves National Park, Brazil</p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- Wonders Section - Card Stack -->
+    <section class="wonders" id="wonders">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-tag">The Monumental Prehistoric Sanctuary</p>
+                <h2 class="section-title">Core Wonders: Prehistoric Art & Geological Masterpieces</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="card-stack-container reveal">
+                <div class="card-stack" id="cardStack">
+                    <div class="stack-card" data-index="0">
+                        <img src="https://kimi-web-img.moonshot.cn/img/whc.unesco.org/b7714c3248a6e41030384dc368d1c96d2cee051e.webp" alt="Gruta do Janelão Giant Stalagmite Column">
+                        <div class="stack-card-content">
+                            <h3>🪨 World's Largest Stalagmite Column</h3>
+                            <p>Giant stalagmite columns inside Janelão Cave, reaching dozens of meters high, formed over millennia of sedimentation</p>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-index="1">
+                        <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/5fc9992d31d9f76b00407ca2c8796e4b577ef0da.jpg" alt="Ten-Thousand-Year Prehistoric Murals">
+                        <div class="stack-card-content">
+                            <h3>🎨 Ten-Thousand-Year Prehistoric Indigenous Murals</h3>
+                            <p>Exquisitely preserved, vividly colored prehistoric human murals on towering cliff walls</p>
+                        </div>
+                    </div>
+                    <div class="stack-card" data-index="2">
+                        <img src="https://kimi-web-img.moonshot.cn/img/en.mercopress.com/e821273533407351d06cd798a8e33dd3bce6a101.jpg" alt="Karst Cave Bottom Ecosystem">
+                        <div class="stack-card-content">
+                            <h3>🌿 Karst Cave Bottom Ecosystem</h3>
+                            <p>Hidden temperate deciduous forests at the bottom of the cave system, a unique subterranean ecological wonder</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-nav" id="cardNav">
+                    <button class="card-nav-btn active" data-index="0"></button>
+                    <button class="card-nav-btn" data-index="1"></button>
+                    <button class="card-nav-btn" data-index="2"></button>
+                </div>
+                <p class="card-hint">👆 Click cards to switch, explore like flipping through archaeological archives</p>
+            </div>
+
+            <div class="wonders-text reveal">
+                <p>Venturing deep into the Peruaçu Caves feels like traveling back to Earth ten thousand years ago. This is one of Brazil's most stunning geological and archaeological wonders. The park is renowned in the scientific community for its magnificent karst landscapes, hundred-meter-high natural rock arches, and the world's largest known stalagmite columns. Moreover, the towering cliffs outside the caves bear exquisitely colored murals painted by prehistoric humans over ten thousand years ago. This perfect fusion of "ancient art and natural masterpieces" provides an unparalleled unique selling point (USP) for international travelers seeking hardcore exploration and historical research.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Route Section -->
+    <section class="route" id="route">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-tag">Route to the Underground Realm</p>
+                <h2 class="section-title">A Journey to the Depths</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="route-content">
+                <div class="route-image reveal">
+                    <img src="https://kimi-web-img.moonshot.cn/img/dynamic-media-cdn.tripadvisor.com/3c7f979158a1fd514044661e36db19bcb9147836.jpg" alt="Januária Town Scenery">
+                </div>
+                <div class="route-text reveal">
+                    <h3>A Journey Full of Ritual and Adventure</h3>
+                    <p>The journey to this underground realm is itself an adventure full of ritual. International travelers typically fly to Belo Horizonte, the capital of Minas Gerais, then transfer via regional flights or long-distance buses to the northern hub of Montes Claros, followed by a 3.5-hour self-drive to the park's gateway cities.</p>
+
+                    <div class="route-steps">
+                        <div class="route-step">
+                            <div class="step-number">01</div>
+                            <div class="step-text">
+                                <strong>Belo Horizonte</strong>
+                                Capital of Minas Gerais, main international flight entry point
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-number">02</div>
+                            <div class="step-text">
+                                <strong>Montes Claros</strong>
+                                Northern hub, regional flight or long-distance bus transfer
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-number">03</div>
+                            <div class="step-text">
+                                <strong>Januária / Itacarambi</strong>
+                                Park gateway cities, approximately 3.5-hour self-drive
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-number">04</div>
+                            <div class="step-text">
+                                <strong>Certified Guide-Led Trekking</strong>
+                                Private vehicles and unlicensed visitors strictly prohibited; explore via low-carbon trekking
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lodging Section -->
+    <section class="lodging" id="lodging">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <p class="section-tag">Authentic Eco-Lodging</p>
+                <h2 class="section-title">Rural Inns & Indigenous Cultural Camps</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <p class="lodging-intro reveal">
+                To protect the fragile karst environment, the park itself does not provide accommodation, but the surrounding towns offer highly authentic local eco-experiences. From high-end eco-boutique inns retaining the rich Minas rural charm to zero-carbon luxury eco-resorts, they cater to diverse traveler needs.
+            </p>
+
+            <div class="lodging-grid">
+                <div class="lodging-card reveal">
+                    <div class="lodging-card-img">
+                        <img src="https://kimi-web-img.moonshot.cn/img/a0.muscache.com/e5ee082237df6e60219df9bb591c859868c590b4.jpeg" alt="São Francisco River Eco-Lodge">
+                    </div>
+                    <div class="lodging-card-body">
+                        <h3>Traditional Rural Eco-Inn (Pousada)</h3>
+                        <div class="location">📍 Januária · São Francisco Riverbank</div>
+                        <p>Near the São Francisco River, numerous high-end eco-boutique inns (Pousadas) retain the rich Minas rural charm, offering authentic local organic cuisine and modern comfortable facilities, beloved by traditional culture travelers.</p>
+                    </div>
+                </div>
+                <div class="lodging-card reveal">
+                    <div class="lodging-card-img">
+                        <img src="https://kimi-web-img.moonshot.cn/img/dynamic-media-cdn.tripadvisor.com/3758938ce14c352c4092d1f85e6851201d81399f.jpg" alt="Itacarambi Luxury Eco-Resort">
+                    </div>
+                    <div class="lodging-card-body">
+                        <h3>Luxury Eco-Resort</h3>
+                        <div class="location">📍 Itacarambi · Park Boundary</div>
+                        <p>Itacarambi, adjacent to the park boundary, hides numerous luxury eco-resorts emphasizing "zero-carbon emissions," allowing high-net-worth travelers seeking to escape industrial civilization and pursue deep sustainable tourism to truly return to pristine nature.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sustainability Section -->
+    <section class="sustainability" id="sustainability">
+        <div class="sustainability-bg"></div>
+        <div class="sustainability-overlay"></div>
+        <div class="sustainability-content">
+            <div class="reveal">
+                <p class="section-tag">Sustainable Guardianship</p>
+                <h2>Sustainable Guardianship & Vision</h2>
+                <p>As a protected sanctuary integrating geology, archaeology, and ecology, Peruaçu holds tremendous development potential in the international high-end niche tourism market. In the future, through introducing customized prehistoric archaeological research programs, high-end geological photography, and cultural heritage experiences tied to surrounding indigenous communities, it will precisely capture the global eco-conscious clientele who value social responsibility and intellectual engagement.</p>
+                <p>Peruaçu is not merely a cave park, but an epic of Earth inscribed in stone and a memory vessel of early human civilization, awaiting the civilized visitation of global pioneer travelers.</p>
+            </div>
+            <div class="sustainability-icons reveal">
+                <div class="sus-icon">
+                    <div class="sus-icon-circle">🏛️</div>
+                    <span>Archaeological Research</span>
+                </div>
+                <div class="sus-icon">
+                    <div class="sus-icon-circle">📷</div>
+                    <span>Geological Photography</span>
+                </div>
+                <div class="sus-icon">
+                    <div class="sus-icon-circle">🤝</div>
+                    <span>Indigenous Culture</span>
+                </div>
+                <div class="sus-icon">
+                    <div class="sus-icon-circle">🌱</div>
+                    <span>Zero-Carbon Eco-Tourism</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Peruaçu Caves National Park</div>
+            <p class="footer-text">Parque Nacional Cavernas do Peruaçu, Minas Gerais, Brazil</p>
+            <div class="footer-divider"></div>
+            <p class="footer-text">© 2026 Student Project | Destination Marketing Website</p>
+        </div>
+    </footer>
+
+    <script>
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                document.querySelector('.hero').classList.add('loaded');
+            }, 1500);
+        });
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Card Stack Interaction
+        const cards = document.querySelectorAll('.stack-card');
+        const navBtns = document.querySelectorAll('.card-nav-btn');
+        let currentCard = 0;
+
+        function showCard(index) {
+            cards.forEach((card, i) => {
+                card.classList.remove('active', 'moved');
+                if (i === index) {
+                    card.style.zIndex = 10;
+                    card.style.transform = 'translateX(-50%) translateY(0) scale(1)';
+                    card.style.opacity = '1';
+                } else if (i < index) {
+                    card.classList.add('moved');
+                } else {
+                    const offset = (i - index) * 20;
+                    const scale = 1 - (i - index) * 0.05;
+                    const opacity = 1 - (i - index) * 0.3;
+                    card.style.zIndex = 3 - (i - index);
+                    card.style.transform = `translateX(-50%) translateY(${offset}px) scale(${scale})`;
+                    card.style.opacity = opacity;
+                }
+            });
+
+            navBtns.forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+            currentCard = index;
+        }
+
+        cards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                if (index === currentCard && currentCard < cards.length - 1) {
+                    showCard(currentCard + 1);
+                } else if (index === currentCard && currentCard === cards.length - 1) {
+                    showCard(0);
+                } else {
+                    showCard(index);
+                }
+            });
+        });
+
+        navBtns.forEach((btn, index) => {
+            btn.addEventListener('click', () => showCard(index));
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroBg = document.querySelector('.hero-bg');
+            if (heroBg && scrolled < window.innerHeight) {
+                heroBg.style.transform = `translateY(${scrolled * 0.5}px) scale(1)`;
+            }
+        });
+    </script>
+
+    <!-- References Section -->
+    <section class="references" id="references" style="background: var(--earth-dark); padding: 4rem 2rem; border-top: 1px solid rgba(201, 168, 76, 0.2);">
+        <div class="section-container" style="max-width: 1200px; margin: 0 auto;">
+            <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+                <p class="section-tag">Bibliography</p>
+                <h2 class="section-title">Reference</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div style="max-width: 900px; margin: 0 auto; background: rgba(61, 43, 31, 0.4); padding: 2.5rem; border-radius: 12px; border-left: 3px solid var(--earth-gold);">
+                <div style="font-size: 0.9rem; line-height: 2; color: var(--earth-cream); opacity: 0.9;">
+                    <p style="margin-bottom: 1rem;">ICMBio (Instituto Chico Mendes de Conservação da Biodiversidade), 2024. <em>Plano de Manejo do Parque Nacional Cavernas do Peruaçu</em>. Brasília: Ministério do Meio Ambiente.</p>
+                    <p style="margin-bottom: 1rem;">Minas Gerais Tourism Board (Secult MG), 2025. <em>Archaeological Tourism and Speleology Development Plan: Northern Region</em>. Belo Horizonte: Secretaria de Estado de Cultura e Turismo de Minas Gerais.</p>
+                    <p style="margin-bottom: 1rem;">Ministry of Tourism of Brazil, 2025. <em>Low-Impact Adventure and Cultural Heritage Tourism Trends</em>. Brasília: Ministério do Turismo.</p>
+                    <p style="margin-bottom: 0.5rem;">Tripadvisor, 2026. <em>Things to Do in Itacarambi</em> [Online]. Available at: https://www.tripadvisor.com/Attractions-g2572490-Activities-Itacarambi_State_of_Minas_Gerais.html (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Gontijo Blog, 2026. <em>Januária: o destino perfeito para quem gosta de cavernas</em> [Online]. Available at: https://blog.gontijo.com.br/blog/januaria-o-destino-perfeito-para-quem-gosta-de-cavernas (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Civitatis, 2026. <em>Cavernas do Peruaçu National Park 5-Day Trip From Belo Horizonte</em> [Online]. Available at: https://www.civitatis.com/en/belo-horizonte/cavernas-peruacu-multi-day-trip/ (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">UNESCO World Heritage Centre, 2025. <em>Peruaçu River Canyon</em> [Online]. Available at: https://whc.unesco.org/en/list/1747/ (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Tripadvisor, 2026. <em>Itacarambi, Brazil Tourism</em> [Online]. Available at: https://www.tripadvisor.com/Tourism-g2572490-Itacarambi_State_of_Minas_Gerais-Vacations.html (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Tripadvisor, 2026. <em>Gruta do Janelao cave - Parque Nacional Cavernas do Peruaçu</em> [Online]. Available at: https://www.tripadvisor.com/LocationPhotoDirectLink-g2344214-d8310221-i261883367-Parque-Nacional-Cavernas-do-Peruacu-Januaria_State_of_Minas_Gerais.html (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Airbnb, 2026. <em>São Francisco River, Brazil Vacation Rentals</em> [Online]. Available at: https://www.airbnb.com.sg/sao-francisco-river-brazil/stays/nature-eco-lodges (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Tripadvisor, 2026. <em>Things to Do in Januaria</em> [Online]. Available at: https://www.tripadvisor.com/Attractions-g2344214-Activities-Januaria_State_of_Minas_Gerais.html (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Traverse Journeys, 2026. <em>Community-Based and Eco-Tourism in Brazil</em> [Online]. Available at: https://traversejourneys.com/blog/community-based-and-eco-tourism-in-brazil (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Shutterstock, 2026. <em>Rock Painting Region Peruacu River Valley</em> [Online]. Available at: https://www.shutterstock.com/image-photo/rock-painting-region-peruacu-river-valley-1537820663 (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Shutterstock, 2026. <em>Typical Indigenous Handicrafts Marajoara Ceramics</em> [Online]. Available at: https://www.shutterstock.com/image-photo/typical-indigenous-handicrafts-marajoara-ceramics-state-2165847421 (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Conheça Minas, 2020. <em>Januária: história, cultura, culinária, artesanato e tradição</em> [Online]. Available at: https://www.conhecaminas.com/2020/01/conheca-januaria.html (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">People's Daily Online, 2025. <em>Magical Tyndall effect through natural 'skylight'</em> [Online]. Available at: https://en.people.cn/n3/2025/0716/c90000-20340771.html (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Mercado Brasil, 2026. <em>Januária – MG</em> [Online]. Available at: https://mercadobrasil.art.br/associacao/januaria-mg/ (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">MercoPress, 2025. <em>Peruaçu Caves in Brazil recognized as UNESCO World Heritage Site</em> [Online]. Available at: https://en.mercopress.com/2025/07/14/perua-u-caves-in-brazil-recognized-as-unesco-world-heritage-site (Accessed: 29 June 2026).</p>
+                    <p style="margin-bottom: 0.5rem;">Shutterstock, 2026. <em>Rock Painting Region Peruacu River Valley</em> [Online]. Available at: https://www.shutterstock.com/image-photo/rock-painting-region-peruacu-river-valley-1537825217 (Accessed: 29 June 2026).</p>
+                    <p>Shutterstock, 2026. <em>Handicraft Brazil</em> [Online]. Available at: https://www.shutterstock.com/search/handicraft-brazil (Accessed: 29 June 2026).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
